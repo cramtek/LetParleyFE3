@@ -5,7 +5,8 @@
       "Bash(npm run dev:*)",
       "Bash(rmdir:*)",
       "Bash(del package-lock.json)",
-      "Bash(curl:*)"
+      "Bash(curl:*)",
+      "Bash(npm run lint)"
     ],
     "deny": []
   }
