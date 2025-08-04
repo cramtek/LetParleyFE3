@@ -10,7 +10,6 @@ import {
   Fade,
   FormControl,
   FormHelperText,
-  Grid,
   IconButton,
   InputAdornment,
   InputLabel,
@@ -23,6 +22,7 @@ import {
   Typography,
   alpha,
 } from '@mui/material';
+import Grid from '@mui/material/Grid';
 import { useTheme } from '@mui/material/styles';
 import { useLetParleyAuth } from '../../../providers/LetParleyAuthProvider';
 import {
@@ -173,7 +173,7 @@ const CreateBusinessWizard = ({ open, onClose, onSuccess }) => {
             justifyContent: 'center',
             mx: 'auto',
             mb: 3,
-            boxShadow: theme.shadows[8],
+            boxShadow: theme.shadows[4],
           }}
         >
           <IconifyIcon icon="solar:buildings-2-bold" sx={{ fontSize: 40, color: 'white' }} />
@@ -187,7 +187,7 @@ const CreateBusinessWizard = ({ open, onClose, onSuccess }) => {
       </Box>
 
       <Grid container spacing={3}>
-        <Grid item xs={12}>
+        <Grid size={{ xs: 12 }}>
           <TextField
             fullWidth
             label="Nombre del Negocio"
@@ -206,7 +206,7 @@ const CreateBusinessWizard = ({ open, onClose, onSuccess }) => {
             }}
           />
         </Grid>
-        <Grid item xs={12}>
+        <Grid size={{ xs: 12 }}>
           <TextField
             fullWidth
             label="Email del Negocio"
@@ -244,7 +244,7 @@ const CreateBusinessWizard = ({ open, onClose, onSuccess }) => {
             justifyContent: 'center',
             mx: 'auto',
             mb: 3,
-            boxShadow: theme.shadows[8],
+            boxShadow: theme.shadows[4],
           }}
         >
           <IconifyIcon icon="solar:map-point-bold" sx={{ fontSize: 40, color: 'white' }} />
@@ -258,7 +258,7 @@ const CreateBusinessWizard = ({ open, onClose, onSuccess }) => {
       </Box>
 
       <Grid container spacing={3}>
-        <Grid item xs={12}>
+        <Grid size={{ xs: 12 }}>
           <TextField
             fullWidth
             label="Dirección"
@@ -274,7 +274,7 @@ const CreateBusinessWizard = ({ open, onClose, onSuccess }) => {
             }}
           />
         </Grid>
-        <Grid item xs={12} sm={6}>
+        <Grid size={{ xs: 12, sm: 6 }}>
           <TextField
             fullWidth
             label="Ciudad"
@@ -283,7 +283,7 @@ const CreateBusinessWizard = ({ open, onClose, onSuccess }) => {
             onChange={(e) => updateField('city', e.target.value)}
           />
         </Grid>
-        <Grid item xs={12} sm={6}>
+        <Grid size={{ xs: 12, sm: 6 }}>
           <TextField
             fullWidth
             label="País"
@@ -292,7 +292,7 @@ const CreateBusinessWizard = ({ open, onClose, onSuccess }) => {
             onChange={(e) => updateField('country', e.target.value)}
           />
         </Grid>
-        <Grid item xs={12} sm={6}>
+        <Grid size={{ xs: 12, sm: 6 }}>
           <TextField
             fullWidth
             label="Teléfono"
@@ -310,7 +310,7 @@ const CreateBusinessWizard = ({ open, onClose, onSuccess }) => {
             }}
           />
         </Grid>
-        <Grid item xs={12} sm={6}>
+        <Grid size={{ xs: 12, sm: 6 }}>
           <TextField
             fullWidth
             label="Sitio Web"
@@ -346,7 +346,7 @@ const CreateBusinessWizard = ({ open, onClose, onSuccess }) => {
             justifyContent: 'center',
             mx: 'auto',
             mb: 3,
-            boxShadow: theme.shadows[8],
+            boxShadow: theme.shadows[4],
           }}
         >
           <IconifyIcon
@@ -363,7 +363,7 @@ const CreateBusinessWizard = ({ open, onClose, onSuccess }) => {
       </Box>
 
       <Grid container spacing={3}>
-        <Grid item xs={12}>
+        <Grid size={{ xs: 12 }}>
           <FormControl fullWidth>
             <InputLabel>Industria</InputLabel>
             <Select
@@ -379,7 +379,7 @@ const CreateBusinessWizard = ({ open, onClose, onSuccess }) => {
             </Select>
           </FormControl>
         </Grid>
-        <Grid item xs={12}>
+        <Grid size={{ xs: 12 }}>
           <FormControl fullWidth>
             <InputLabel>Número de Empleados</InputLabel>
             <Select
@@ -395,7 +395,7 @@ const CreateBusinessWizard = ({ open, onClose, onSuccess }) => {
             </Select>
           </FormControl>
         </Grid>
-        <Grid item xs={12}>
+        <Grid size={{ xs: 12 }}>
           <TextField
             fullWidth
             label="Descripción"
@@ -424,7 +424,7 @@ const CreateBusinessWizard = ({ open, onClose, onSuccess }) => {
             justifyContent: 'center',
             mx: 'auto',
             mb: 3,
-            boxShadow: theme.shadows[8],
+            boxShadow: theme.shadows[4],
           }}
         >
           <IconifyIcon icon="solar:gallery-bold" sx={{ fontSize: 40, color: 'white' }} />

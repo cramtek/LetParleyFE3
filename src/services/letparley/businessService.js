@@ -215,3 +215,18 @@ export const BUSINESS_INDUSTRIES = [
   'Telecomunicaciones',
   'Otros',
 ];
+
+/**
+ * Get business name by ID from a list of businesses
+ * @param {Array} businesses - Array of business objects
+ * @param {string} businessId - Business ID to search for
+ * @returns {string} Business name or fallback
+ */
+export const getBusinessNameById = (businesses, businessId) => {
+  if (!businesses || !Array.isArray(businesses) || !businessId) {
+    return 'LetParley';
+  }
+
+  const business = businesses.find((b) => b.business_id?.toString() === businessId.toString());
+  return business ? business.name : `Negocio ${businessId}`;
+};

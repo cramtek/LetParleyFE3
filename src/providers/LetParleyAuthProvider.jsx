@@ -11,6 +11,10 @@ const initialState = {
   isNewUser: false,
   isAuthenticated: false,
 
+  // Business data
+  businesses: [],
+  selectedBusinessName: null,
+
   // Loading states
   isLoading: true,
   isAuthenticating: false,
@@ -33,6 +37,8 @@ const ACTIONS = {
   SET_IS_NEW_USER: 'SET_IS_NEW_USER',
   SET_VERIFICATION_EMAIL: 'SET_VERIFICATION_EMAIL',
   SET_ERROR: 'SET_ERROR',
+  SET_BUSINESSES: 'SET_BUSINESSES',
+  SET_SELECTED_BUSINESS_NAME: 'SET_SELECTED_BUSINESS_NAME',
   SIGN_IN: 'SIGN_IN',
   SIGN_OUT: 'SIGN_OUT',
   LOAD_FROM_STORAGE: 'LOAD_FROM_STORAGE',
@@ -71,6 +77,12 @@ const authReducer = (state, action) => {
 
     case ACTIONS.SET_ERROR:
       return { ...state, error: action.payload };
+
+    case ACTIONS.SET_BUSINESSES:
+      return { ...state, businesses: action.payload };
+
+    case ACTIONS.SET_SELECTED_BUSINESS_NAME:
+      return { ...state, selectedBusinessName: action.payload };
 
     case ACTIONS.SIGN_IN:
       return {
@@ -154,6 +166,15 @@ export const LetParleyAuthProvider = ({ children }) => {
   const setIsNewUser = useCallback((isNewUser) => {
     dispatch({ type: ACTIONS.SET_IS_NEW_USER, payload: isNewUser });
     AuthStorage.setIsNewUser(isNewUser);
+  }, []);
+
+  const setBusinesses = useCallback((businesses) => {
+    dispatch({ type: ACTIONS.SET_BUSINESSES, payload: businesses });
+  }, []);
+
+  const setSelectedBusinessName = useCallback((name) => {
+    dispatch({ type: ACTIONS.SET_SELECTED_BUSINESS_NAME, payload: name });
+    AuthStorage.setSelectedBusinessName(name);
   }, []);
 
   // Main authentication actions
@@ -246,6 +267,10 @@ export const LetParleyAuthProvider = ({ children }) => {
     signIn,
     signOut,
     loadFromStorage,
+
+    // Business management
+    setBusinesses,
+    setSelectedBusinessName,
 
     // Auth context for services
     authContext: authContextValue,

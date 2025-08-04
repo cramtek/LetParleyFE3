@@ -18,6 +18,7 @@ import {
 } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import IconifyIcon from '../../../components/base/IconifyIcon';
+import LetParleyLogo from '../../../components/letparley/common/LetParleyLogo';
 import StyledTextField from '../../../components/styled/StyledTextField';
 import { useLetParleyAuth } from '../../../providers/LetParleyAuthProvider';
 import {
@@ -217,14 +218,17 @@ const VerifyPage = () => {
           }
         }
 
-        // Step 3: Continue with normal flow
+        // Step 3: Store success data and show animation
         setSuccessData(data);
         setIsSuccess(true);
-        signIn(data.session_token, verificationEmail, data.user_id, data.is_new_user);
 
-        // Step 4: Navigate after success animation
+        // Step 4: Sign in (synchronous) and then navigate
+        signIn(data.session_token, verificationEmail, data.user_id, data.is_new_user);
+        console.log('✅ SignIn completed successfully');
+
+        // Navigate after success animation - let the auth guards handle the redirect logic
         setTimeout(() => {
-          navigate('/letparley/select-business');
+          navigate('/letparley');
         }, 2500);
       } else {
         setError(data.message || 'Error al verificar el código');
@@ -271,7 +275,7 @@ const VerifyPage = () => {
         }}
       >
         <Paper
-          elevation={8}
+          elevation={4}
           sx={{
             p: 4,
             borderRadius: 3,
@@ -304,7 +308,7 @@ const VerifyPage = () => {
       >
         <Fade in={true} timeout={500}>
           <Paper
-            elevation={8}
+            elevation={4}
             sx={{
               p: 4,
               borderRadius: 3,
@@ -438,22 +442,8 @@ const VerifyPage = () => {
       <Container maxWidth="sm">
         {/* Logo Section */}
         <Box sx={{ textAlign: 'center', mb: 4 }}>
-          <Box
-            sx={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              width: 64,
-              height: 64,
-              borderRadius: 3,
-              background: `linear-gradient(135deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
-              mb: 2,
-              boxShadow: theme.shadows[8],
-            }}
-          >
-            <Typography variant="h4" sx={{ color: 'white', fontWeight: 700 }}>
-              LP
-            </Typography>
+          <Box sx={{ mb: 2 }}>
+            <LetParleyLogo showName={true} showFullName={false} sx={{ justifyContent: 'center' }} />
           </Box>
 
           <Typography variant="h4" sx={{ fontWeight: 700, mb: 1 }}>
@@ -471,7 +461,7 @@ const VerifyPage = () => {
 
         {/* Form Section */}
         <Paper
-          elevation={8}
+          elevation={4}
           sx={{
             p: 4,
             borderRadius: 3,
@@ -628,7 +618,7 @@ const VerifyPage = () => {
                 boxShadow: theme.shadows[4],
                 '&:hover': {
                   background: `linear-gradient(135deg, ${theme.palette.primary.dark}, ${theme.palette.secondary.dark})`,
-                  boxShadow: theme.shadows[8],
+                  boxShadow: theme.shadows[4],
                   transform: 'translateY(-1px)',
                 },
                 '&:disabled': {

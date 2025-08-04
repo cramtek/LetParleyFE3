@@ -305,7 +305,7 @@ const TermsAndPrivacyModal = ({ open = false, onClose }) => {
             '&:hover': {
               background: `linear-gradient(135deg, ${theme.palette.primary.dark}, ${theme.palette.secondary.dark})`,
               transform: 'translateY(-1px)',
-              boxShadow: theme.shadows[8],
+              boxShadow: theme.shadows[4],
             },
           }}
           startIcon={<IconifyIcon icon="solar:check-circle-outline" />}

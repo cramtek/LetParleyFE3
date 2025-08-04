@@ -172,81 +172,96 @@ export const AuthStorage = {
   // Session token
   setSessionToken: (token) => {
     if (token) {
-      localStorage.setItem('letparley_session_token', token);
+      localStorage.setItem('session_token', token);
     } else {
-      localStorage.removeItem('letparley_session_token');
+      localStorage.removeItem('session_token');
     }
   },
 
   getSessionToken: () => {
-    return localStorage.getItem('letparley_session_token');
+    return localStorage.getItem('session_token');
   },
 
   // User email
   setUserEmail: (email) => {
     if (email) {
-      localStorage.setItem('letparley_user_email', email);
+      localStorage.setItem('user_email', email);
     } else {
-      localStorage.removeItem('letparley_user_email');
+      localStorage.removeItem('user_email');
     }
   },
 
   getUserEmail: () => {
-    return localStorage.getItem('letparley_user_email');
+    return localStorage.getItem('user_email');
   },
 
-  // Selected business ID
+  // Selected business ID - CRITICAL: use exact OLD project name
   setSelectedBusinessId: (id) => {
     if (id) {
-      localStorage.setItem('letparley_selected_business_id', id);
+      localStorage.setItem('selected_business_id', id);
     } else {
-      localStorage.removeItem('letparley_selected_business_id');
+      localStorage.removeItem('selected_business_id');
     }
   },
 
   getSelectedBusinessId: () => {
-    return localStorage.getItem('letparley_selected_business_id');
+    return localStorage.getItem('selected_business_id');
+  },
+
+  // Selected business name
+  setSelectedBusinessName: (name) => {
+    if (name) {
+      localStorage.setItem('selected_business_name', name);
+    } else {
+      localStorage.removeItem('selected_business_name');
+    }
+  },
+
+  getSelectedBusinessName: () => {
+    return localStorage.getItem('selected_business_name');
   },
 
   // User ID
   setUserId: (id) => {
     if (id) {
-      localStorage.setItem('letparley_user_id', id);
+      localStorage.setItem('user_id', id);
     } else {
-      localStorage.removeItem('letparley_user_id');
+      localStorage.removeItem('user_id');
     }
   },
 
   getUserId: () => {
-    return localStorage.getItem('letparley_user_id');
+    return localStorage.getItem('user_id');
   },
 
   // Is new user flag
   setIsNewUser: (isNew) => {
-    localStorage.setItem('letparley_is_new_user', isNew.toString());
+    localStorage.setItem('is_new_user', isNew.toString());
   },
 
   getIsNewUser: () => {
-    return localStorage.getItem('letparley_is_new_user') === 'true';
+    return localStorage.getItem('is_new_user') === 'true';
   },
 
   // Clear all auth data
   clearAll: () => {
-    localStorage.removeItem('letparley_session_token');
-    localStorage.removeItem('letparley_user_email');
-    localStorage.removeItem('letparley_selected_business_id');
-    localStorage.removeItem('letparley_user_id');
-    localStorage.removeItem('letparley_is_new_user');
+    localStorage.removeItem('session_token');
+    localStorage.removeItem('user_email');
+    localStorage.removeItem('selected_business_id');
+    localStorage.removeItem('selected_business_name');
+    localStorage.removeItem('user_id');
+    localStorage.removeItem('is_new_user');
   },
 
   // Load all auth data
   loadAll: () => {
     try {
-      const token = localStorage.getItem('letparley_session_token');
-      const email = localStorage.getItem('letparley_user_email');
-      const businessId = localStorage.getItem('letparley_selected_business_id');
-      const userId = localStorage.getItem('letparley_user_id');
-      const isNewUser = localStorage.getItem('letparley_is_new_user') === 'true';
+      const token = localStorage.getItem('session_token');
+      const email = localStorage.getItem('user_email');
+      const businessId = localStorage.getItem('selected_business_id');
+      const businessName = localStorage.getItem('selected_business_name');
+      const userId = localStorage.getItem('user_id');
+      const isNewUser = localStorage.getItem('is_new_user') === 'true';
 
       // Validate token exists and is not empty
       const isValidToken = token && token.trim().length > 0;
@@ -255,6 +270,7 @@ export const AuthStorage = {
         sessionToken: isValidToken ? token : null,
         userEmail: email,
         selectedBusinessId: businessId,
+        selectedBusinessName: businessName,
         userId: userId,
         isNewUser,
         isAuthenticated: !!isValidToken,
@@ -265,6 +281,7 @@ export const AuthStorage = {
         sessionToken: null,
         userEmail: null,
         selectedBusinessId: null,
+        selectedBusinessName: null,
         userId: null,
         isNewUser: false,
         isAuthenticated: false,

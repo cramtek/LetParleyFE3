@@ -22,3 +22,6 @@ dist-ssr
 *.sw?
 
 src/assets
+.claude
+Ejemplo/
+OLD/

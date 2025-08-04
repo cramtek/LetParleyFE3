@@ -16,6 +16,7 @@ import {
 } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import IconifyIcon from '../../../components/base/IconifyIcon';
+import LetParleyLogo from '../../../components/letparley/common/LetParleyLogo';
 import { useLetParleyAuth } from '../../../providers/LetParleyAuthProvider';
 import { checkTermsAcceptance, isValidEmail } from '../../../services/letparley/authService';
 
@@ -130,7 +131,7 @@ const LoginPage = () => {
       >
         <Fade in={true} timeout={500}>
           <Paper
-            elevation={8}
+            elevation={4}
             sx={{
               p: 4,
               borderRadius: 3,
@@ -226,22 +227,8 @@ const LoginPage = () => {
       <Container maxWidth="sm">
         {/* Logo Section */}
         <Box sx={{ textAlign: 'center', mb: 4 }}>
-          <Box
-            sx={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              width: 80,
-              height: 80,
-              borderRadius: 3,
-              background: `linear-gradient(135deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
-              mb: 3,
-              boxShadow: theme.shadows[8],
-            }}
-          >
-            <Typography variant="h3" sx={{ color: 'white', fontWeight: 700 }}>
-              LP
-            </Typography>
+          <Box sx={{ mb: 3 }}>
+            <LetParleyLogo showName={true} showFullName={false} sx={{ justifyContent: 'center' }} />
           </Box>
 
           <Typography
@@ -358,7 +345,7 @@ const LoginPage = () => {
                 boxShadow: theme.shadows[4],
                 '&:hover': {
                   background: `linear-gradient(135deg, ${theme.palette.primary.dark}, ${theme.palette.secondary.dark})`,
-                  boxShadow: theme.shadows[8],
+                  boxShadow: theme.shadows[4],
                   transform: 'translateY(-1px)',
                 },
                 '&:disabled': {

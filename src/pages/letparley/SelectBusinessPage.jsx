@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   Alert,
@@ -16,7 +16,8 @@ import {
 import Grid from '@mui/material/Grid';
 import { useTheme } from '@mui/material/styles';
 import IconifyIcon from '../../components/base/IconifyIcon';
-import CreateBusinessWizard from '../../components/letparley/business/CreateBusinessWizard';
+import LetParleyLogo from '../../components/letparley/common/LetParleyLogo';
+// import CreateBusinessWizard from '../../components/letparley/business/CreateBusinessWizard';
 import LoadingScreen from '../../components/letparley/common/LoadingScreen';
 import { useLetParleyAuth } from '../../providers/LetParleyAuthProvider';
 import { fetchBusinesses, formatBusinessData } from '../../services/letparley/businessService';
@@ -24,29 +25,30 @@ import { fetchBusinesses, formatBusinessData } from '../../services/letparley/bu
 const SelectBusinessPage = () => {
   const theme = useTheme();
   const navigate = useNavigate();
-  const { setSelectedBusinessId, authContext } = useLetParleyAuth();
+  const { setSelectedBusinessId, setSelectedBusinessName, authContext } = useLetParleyAuth();
 
   const [businesses, setBusinesses] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [showCreateWizard, setShowCreateWizard] = useState(false);
 
-  // Load businesses when authContext is ready
+  // Redirect to login if not authenticated
   useEffect(() => {
-    const loadBusinesses = async () => {
-      if (!authContext?.sessionToken) {
-        console.log('⏸️ No authContext available, waiting...');
-        return;
-      }
+    if (!authContext?.sessionToken) {
+      console.log('⏸️ No authContext available, redirecting to login...');
+      navigate('/letparley/auth/login', { replace: true });
+      return;
+    }
 
-      console.log('🚀 Loading businesses...');
+    // Fetch businesses when component mounts
+    console.log('🚀 Loading businesses...');
+    const loadBusinesses = async () => {
       setIsLoading(true);
       setError(null);
 
       try {
         const data = await fetchBusinesses(authContext);
         setBusinesses(data);
-
         console.log(`📊 Loaded ${data.length} businesses`);
       } catch (err) {
         console.error('❌ Error loading businesses:', err);
@@ -57,48 +59,47 @@ const SelectBusinessPage = () => {
     };
 
     loadBusinesses();
-  }, [authContext?.sessionToken]);
+  }, [authContext?.sessionToken, navigate]);
 
-  // Auto-select if only one business (separate effect to avoid dependency issues)
+  // Auto-select if only one business - separate useEffect like OLD project
   useEffect(() => {
-    if (businesses.length === 1 && !isLoading && !error && businesses[0]) {
+    if (businesses.length === 1 && !isLoading && !error) {
       console.log('🔄 Auto-selecting single business:', businesses[0].business_id);
-      handleSelectBusiness(businesses[0]);
+      setSelectedBusinessId(businesses[0].business_id.toString());
+      setSelectedBusinessName(businesses[0].name);
+      navigate('/letparley/dashboard', { replace: true });
     }
-  }, [businesses.length, isLoading, error, handleSelectBusiness]);
+  }, [businesses, isLoading, error, setSelectedBusinessId, setSelectedBusinessName, navigate]);
 
-  const handleSelectBusiness = useCallback(
-    (business) => {
-      console.log('🏢 Selecting business:', business.business_id);
-      setSelectedBusinessId(business.business_id.toString());
-      navigate('/letparley/dashboard', { replace: true });
-    },
-    [setSelectedBusinessId, navigate],
-  );
+  const handleSelectBusiness = (business) => {
+    console.log('🏢 Selecting business:', business.business_id, business.name);
+    setSelectedBusinessId(business.business_id.toString());
+    setSelectedBusinessName(business.name);
+    navigate('/letparley/dashboard', { replace: true });
+  };
 
-  const handleCreateSuccess = useCallback(
-    (businessId) => {
-      console.log('✅ Business created successfully:', businessId);
-      setShowCreateWizard(false);
-      setSelectedBusinessId(businessId.toString());
-      navigate('/letparley/dashboard', { replace: true });
-    },
-    [setSelectedBusinessId, navigate],
-  );
+  const handleCreateSuccess = (businessId) => {
+    console.log('✅ Business created successfully:', businessId);
+    setShowCreateWizard(false);
+    setSelectedBusinessId(businessId.toString());
+    navigate('/letparley/dashboard', { replace: true });
+  };
 
-  const handleRetry = useCallback(async () => {
+  const handleRetry = async () => {
     if (!authContext?.sessionToken) {
       console.log('⏸️ No authContext available, waiting...');
       return;
     }
 
-    console.log('🚀 Loading businesses...');
+    console.log('🚀 Retrying to load businesses...');
     setIsLoading(true);
     setError(null);
 
     try {
       const data = await fetchBusinesses(authContext);
       setBusinesses(data);
+
+
       console.log(`📊 Loaded ${data.length} businesses`);
     } catch (err) {
       console.error('❌ Error loading businesses:', err);
@@ -106,7 +107,7 @@ const SelectBusinessPage = () => {
     } finally {
       setIsLoading(false);
     }
-  }, [authContext?.sessionToken]);
+  };
 
   // Show loading screen
   if (isLoading) {
@@ -128,7 +129,7 @@ const SelectBusinessPage = () => {
       >
         <Container maxWidth="sm">
           <Paper
-            elevation={8}
+            elevation={4}
             sx={{
               p: 4,
               borderRadius: 3,
@@ -137,22 +138,8 @@ const SelectBusinessPage = () => {
               backdropFilter: 'blur(10px)',
             }}
           >
-            <Box
-              sx={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                width: 64,
-                height: 64,
-                borderRadius: 3,
-                background: `linear-gradient(135deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
-                mb: 3,
-                boxShadow: theme.shadows[4],
-              }}
-            >
-              <Typography variant="h4" sx={{ color: 'white', fontWeight: 700 }}>
-                LP
-              </Typography>
+            <Box sx={{ mb: 3 }}>
+              <LetParleyLogo showName={true} showFullName={false} sx={{ justifyContent: 'center' }} />
             </Box>
 
             <Alert severity="error" sx={{ mb: 3, borderRadius: 2 }}>
@@ -192,22 +179,8 @@ const SelectBusinessPage = () => {
         <Container maxWidth="lg">
           {/* Header */}
           <Box sx={{ textAlign: 'center', mb: 6 }}>
-            <Box
-              sx={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                width: 80,
-                height: 80,
-                borderRadius: 3,
-                background: `linear-gradient(135deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
-                mb: 3,
-                boxShadow: theme.shadows[4],
-              }}
-            >
-              <Typography variant="h3" sx={{ color: 'white', fontWeight: 700 }}>
-                LP
-              </Typography>
+            <Box sx={{ mb: 3 }}>
+              <LetParleyLogo showName={true} showFullName={false} sx={{ justifyContent: 'center' }} />
             </Box>
 
             <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', mb: 3 }}>
@@ -237,7 +210,7 @@ const SelectBusinessPage = () => {
           <Box sx={{ maxWidth: 800, mx: 'auto' }}>
             <Fade in={true} timeout={800}>
               <Card
-                elevation={8}
+                elevation={4}
                 sx={{
                   borderRadius: 3,
                   overflow: 'hidden',
@@ -290,7 +263,7 @@ const SelectBusinessPage = () => {
                     fullWidth
                     variant="contained"
                     size="large"
-                    onClick={() => setShowCreateWizard(true)}
+                    disabled
                     sx={{
                       py: 2,
                       borderRadius: 2,
@@ -307,7 +280,7 @@ const SelectBusinessPage = () => {
                     }}
                     startIcon={<IconifyIcon icon="solar:add-circle-bold" />}
                   >
-                    Crear Mi Negocio
+                    Crear Mi Negocio (Temporalmente deshabilitado)
                   </Button>
                 </CardContent>
               </Card>
@@ -315,12 +288,12 @@ const SelectBusinessPage = () => {
           </Box>
         </Container>
 
-        {/* Create Business Wizard */}
-        <CreateBusinessWizard
+        {/* Create Business Wizard - temporarily disabled */}
+        {/* <CreateBusinessWizard
           open={showCreateWizard}
           onClose={() => setShowCreateWizard(false)}
           onSuccess={handleCreateSuccess}
-        />
+        /> */}
       </Box>
     );
   }
@@ -338,22 +311,8 @@ const SelectBusinessPage = () => {
       <Container maxWidth="lg">
         {/* Header */}
         <Box sx={{ textAlign: 'center', mb: 6 }}>
-          <Box
-            sx={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              width: 80,
-              height: 80,
-              borderRadius: 3,
-              background: `linear-gradient(135deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
-              mb: 3,
-              boxShadow: theme.shadows[4],
-            }}
-          >
-            <Typography variant="h3" sx={{ color: 'white', fontWeight: 700 }}>
-              LP
-            </Typography>
+          <Box sx={{ mb: 3 }}>
+            <LetParleyLogo showName={true} showFullName={false} sx={{ justifyContent: 'center' }} />
           </Box>
 
           <Typography variant="h3" sx={{ fontWeight: 700, mb: 2 }}>
@@ -366,7 +325,7 @@ const SelectBusinessPage = () => {
 
           <Button
             variant="contained"
-            onClick={() => setShowCreateWizard(true)}
+            disabled
             sx={{
               borderRadius: 2,
               textTransform: 'none',
@@ -382,7 +341,7 @@ const SelectBusinessPage = () => {
             }}
             startIcon={<IconifyIcon icon="solar:add-circle-bold" />}
           >
-            Agregar Nuevo Negocio
+            Agregar Nuevo Negocio (Deshabilitado)
           </Button>
         </Box>
 
@@ -530,12 +489,12 @@ const SelectBusinessPage = () => {
         </Grid>
       </Container>
 
-      {/* Create Business Wizard */}
-      <CreateBusinessWizard
+      {/* Create Business Wizard - temporarily disabled */}
+      {/* <CreateBusinessWizard
         open={showCreateWizard}
         onClose={() => setShowCreateWizard(false)}
         onSuccess={handleCreateSuccess}
-      />
+      /> */}
     </Box>
   );
 };

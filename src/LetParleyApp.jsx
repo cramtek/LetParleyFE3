@@ -8,11 +8,12 @@ import LandingPage from './pages/letparley/LandingPage';
 import SelectBusinessPage from './pages/letparley/SelectBusinessPage';
 import LoginPage from './pages/letparley/auth/LoginPage';
 import VerifyPage from './pages/letparley/auth/VerifyPage';
+import ConversationsPage from './pages/letparley/ConversationsPage';
 import { LetParleyAuthProvider } from './providers/LetParleyAuthProvider';
 import { DashboardProviderWrapper } from './providers/LetParleyDashboardProvider';
 
-// Aurora Components (for integration examples)
-// import MainLayout from './layouts/main-layout';
+// Aurora Layout Integration
+import LetParleyLayout from './layouts/letparley-layout';
 
 const LetParleyApp = () => {
   return (
@@ -29,30 +30,25 @@ const LetParleyApp = () => {
               <Route path="/letparley/auth/verify" element={<VerifyPage />} />
             </Route>
 
-            {/* Business Selection Route - Special handling */}
-            <Route path="/letparley/select-business" element={<SelectBusinessPage />} />
+            {/* Business Selection Route - Protected but doesn't require business ID */}
+            <Route element={<ProtectedRoute requireBusinessId={false} />}>
+              <Route path="/letparley/select-business" element={<SelectBusinessPage />} />
+            </Route>
 
-            {/* Protected Routes - Main application */}
+            {/* Protected Routes - Main application with Aurora layout */}
             <Route element={<ProtectedRoute />}>
-              {/* Dashboard Route - Can be wrapped with MainLayout for Aurora integration */}
-              <Route path="/letparley/dashboard" element={<DashboardPage />} />
+              <Route element={<LetParleyLayout />}>
+                <Route path="/letparley/dashboard" element={<DashboardPage />} />
+                <Route path="/letparley/conversations" element={<ConversationsPage />} />
 
-              {/* Example with Aurora MainLayout integration:
-              <Route path="/letparley/dashboard" element={
-                <MainLayout>
-                  <DashboardPage />
-                </MainLayout>
-              } />
-              */}
-
-              {/* Future LetParley Routes */}
-              {/* <Route path="/letparley/conversations" element={<ConversationsPage />} />
-              <Route path="/letparley/clients" element={<ClientsPage />} />
-              <Route path="/letparley/assistants" element={<AssistantsPage />} />
-              <Route path="/letparley/integrations" element={<IntegrationsPage />} />
-              <Route path="/letparley/projects" element={<ProjectsPage />} />
-              <Route path="/letparley/subscription" element={<SubscriptionPage />} />
-              <Route path="/letparley/help" element={<HelpPage />} /> */}
+                {/* Future LetParley Routes with Aurora Layout */}
+                {/* <Route path="/letparley/clients" element={<ClientsPage />} />
+                <Route path="/letparley/assistants" element={<AssistantsPage />} />
+                <Route path="/letparley/integrations" element={<IntegrationsPage />} />
+                <Route path="/letparley/projects" element={<ProjectsPage />} />
+                <Route path="/letparley/subscription" element={<SubscriptionPage />} />
+                <Route path="/letparley/help" element={<HelpPage />} /> */}
+              </Route>
             </Route>
 
             {/* Root Redirect with smart logic for authenticated users */}

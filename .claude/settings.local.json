@@ -6,7 +6,12 @@
       "Bash(rmdir:*)",
       "Bash(del package-lock.json)",
       "Bash(curl:*)",
-      "Bash(npm run lint)"
+      "Bash(npm run lint)",
+      "Bash(robocopy:*)",
+      "Bash(powershell:*)",
+      "Bash(del \"C:\\Users\\Carlos\\source\\repos\\LetParleyFE3\\fix_imports.ps1\")",
+      "Bash(rm:*)",
+      "Bash(npm install:*)"
     ],
     "deny": []
   }

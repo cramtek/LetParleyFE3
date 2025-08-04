@@ -18,14 +18,11 @@ const PublicRoute = () => {
   }
 
   // If user is authenticated but hasn't selected a business, redirect to business selection
-  // ONLY if they're not already on login or verify pages (to allow completion of auth flow)
-  if (
-    isAuthenticated &&
-    !selectedBusinessId &&
-    location.pathname !== '/letparley/auth/login' &&
-    location.pathname !== '/letparley/auth/verify'
-  ) {
-    console.log('🏢 User authenticated but no business selected, redirecting to select business');
+  // Allow verify page to complete normally, but redirect login page
+  if (isAuthenticated && !selectedBusinessId && location.pathname === '/letparley/auth/login') {
+    console.log(
+      '🏢 User already authenticated but no business selected, redirecting to select business',
+    );
     return <Navigate to="/letparley/select-business" replace />;
   }
 

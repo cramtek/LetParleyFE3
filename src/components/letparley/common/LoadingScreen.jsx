@@ -27,7 +27,7 @@ const LoadingScreen = ({ message = 'Cargando...' }) => {
           borderRadius: 3,
           background: `linear-gradient(135deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
           mb: 3,
-          boxShadow: theme.shadows[8],
+          boxShadow: theme.shadows[4],
           animation: 'pulse 2s ease-in-out infinite',
           '@keyframes pulse': {
             '0%': { transform: 'scale(1)' },
